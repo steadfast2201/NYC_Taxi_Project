@@ -1,8 +1,9 @@
 artifact_uri: file:///A:/Aniket_Scidentai/MLOPS/nyc_taxi_duration/mlruns/474507014882436721/12c62e15b3c840d08efe1749c14126f1/artifacts
+deleted_time: 1747212104735
 end_time: 1747210961498
 entry_point_name: ''
 experiment_id: '474507014882436721'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: 12c62e15b3c840d08efe1749c14126f1
 run_name: evaluate_regression_model
 run_uuid: 12c62e15b3c840d08efe1749c14126f1

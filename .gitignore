@@ -87,4 +87,5 @@ data/features/
 .dvc/cache/
 /dvclive
 
-
+# Models Files 
+models/

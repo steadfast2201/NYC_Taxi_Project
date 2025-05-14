@@ -37,7 +37,7 @@ def evaluate(model, X, y, split, live, save_path):
     # Predicted vs Actual plot
     fig, ax = plt.subplots()
     ax.scatter(y, preds, alpha=0.4)
-    ax.plot([y.min(), y.max()], [y.min(), y.max()], '--r', linewidth=2)
+    ax.plot([y.min(), y.max()], [y.min(), y.max()], "--r", linewidth=2)
     ax.set_xlabel("Actual")
     ax.set_ylabel("Predicted")
     ax.set_title(f"Actual vs Predicted ({split})")
@@ -51,7 +51,7 @@ def evaluate(model, X, y, split, live, save_path):
     fig, ax = plt.subplots()
     residuals = y - preds
     ax.scatter(preds, residuals, alpha=0.4)
-    ax.axhline(y=0, color='red', linestyle='--')
+    ax.axhline(y=0, color="red", linestyle="--")
     ax.set_xlabel("Predicted")
     ax.set_ylabel("Residuals")
     ax.set_title(f"Residual Plot ({split})")
@@ -121,7 +121,9 @@ def main():
 
         # Log model
         signature = infer_signature(X_test, model.predict(X_test))
-        mlflow.sklearn.log_model(model, "model", input_example=X_test.head(1), signature=signature)
+        mlflow.sklearn.log_model(
+            model, "model", input_example=X_test.head(1), signature=signature
+        )
 
 
 if __name__ == "__main__":
