@@ -1,0 +1,41 @@
+stages:
+  make_dataset:
+    cmd: python .\src\data\make_dataset.py .\data\raw\train.csv
+    deps:
+      - .\data\raw\nyc_taxi.csv
+      - .\src\data\make_dataset.py
+    params:
+      - make_dataset.test_split
+      - make_dataset.seed
+    outs:
+      - .\data\processed
+
+  build_features:
+    cmd: python src/features/build_features.py data/processed data/features
+    deps:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - src/features/build_features.py
+    params:
+      - build_features
+    outs:
+      - data/features/train.csv
+      - data/features/test.csv
+
+  train_model:
+    cmd: python .\src\models\train_model.py .\data\pca
+    deps:
+      - .\data\pca
+      - .\src\models\train_model.py
+    outs:
+      - .\models
+
+  visualize:
+    cmd: python .\src\visualization\visualize.py .\models\model.joblib .\data\pca
+    deps:
+      - .\data\pca
+      - .\models\model.joblib
+      - .\src\visualization\visualize.py
+    outs:
+      - dvclive
+  
