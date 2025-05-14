@@ -1,0 +1,6 @@
+artifact_location: file:///A:/Aniket_Scidentai/MLOPS/nyc_taxi_duration/mlruns/474507014882436721
+creation_time: 1747210959688
+experiment_id: '474507014882436721'
+last_update_time: 1747210959688
+lifecycle_stage: active
+name: regression_model_eval

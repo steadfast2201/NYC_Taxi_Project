@@ -1,41 +1,46 @@
 stages:
   make_dataset:
-    cmd: python .\src\data\make_dataset.py .\data\raw\train.csv
+    cmd: python ./src/data/make_dataset.py ./data/raw/nyc_taxi.csv
     deps:
-      - .\data\raw\nyc_taxi.csv
-      - .\src\data\make_dataset.py
+      - ./data/raw/nyc_taxi.csv
+      - ./src/data/make_dataset.py
     params:
       - make_dataset.test_split
       - make_dataset.seed
     outs:
-      - .\data\processed
+      - ./data/processed/train.csv
+      - ./data/processed/test.csv
 
   build_features:
-    cmd: python src/features/build_features.py data/processed data/features
+    cmd: python ./src/features/build_features.py ./data/processed ./data/features
     deps:
-      - data/processed/train.csv
-      - data/processed/test.csv
-      - src/features/build_features.py
+      - ./data/processed/train.csv
+      - ./data/processed/test.csv
+      - ./src/features/build_features.py
     params:
       - build_features
     outs:
-      - data/features/train.csv
-      - data/features/test.csv
+      - ./data/features/train.csv
+      - ./data/features/test.csv
 
   train_model:
-    cmd: python .\src\models\train_model.py .\data\pca
+    cmd: python ./src/models/train_model.py ./data/features
     deps:
-      - .\data\pca
-      - .\src\models\train_model.py
+      - ./data/features/train.csv
+      - ./src/models/train_model.py
+    params:
+      - train_model.seed
+      - train_model.n_estimators
+      - train_model.max_depth
+      - train_model.learning_rate
     outs:
-      - .\models
+      - ./models
 
   visualize:
-    cmd: python .\src\visualization\visualize.py .\models\model.joblib .\data\pca
+    cmd: python ./src/visualization/visualize.py ./models/model.joblib ./data/features
     deps:
-      - .\data\pca
-      - .\models\model.joblib
-      - .\src\visualization\visualize.py
+      - ./models/model.joblib
+      - ./data/features/test.csv
+      - ./src/visualization/visualize.py
     outs:
       - dvclive
-  

@@ -9,6 +9,7 @@ import numpy as np
 def edit_id_column(df):
     df['id'] = df['id'].str.replace('id', '', regex=False)
     df['id'] = df['id'].astype(int)
+    return df
 
 def haversine_np(lat1, lon1, lat2, lon2):
     """
@@ -29,6 +30,16 @@ def haversine_np(lat1, lon1, lat2, lon2):
 
     return R * c
 
+def modify_datetime(df):
+
+    df["pickup_datetime"] = pd.to_datetime(df["pickup_datetime"])
+    df["dropoff_datetime"] = pd.to_datetime(df["dropoff_datetime"])
+
+    # Compute trip duration in minutes
+    df["trip_time_minutes"] = (df["dropoff_datetime"] - df["pickup_datetime"]).dt.total_seconds() / 60
+
+    return df
+
 def main():
     curr_dir = pathlib.Path(__file__)
     home_dir = curr_dir.parent.parent.parent
@@ -44,35 +55,48 @@ def main():
     train_df = pd.read_csv(f"{input_path}/train.csv")
     test_df = pd.read_csv(f"{input_path}/test.csv")
 
-    train_df = edit_id_column(train_df)
-    test_df = edit_id_column(test_df)
-
-    # Apply it to your dataframe
-    train_df['trip_distance_km'] = haversine_np(
-        train_df['pickup_latitude'],
-        train_df['pickup_longitude'],
-        train_df['dropoff_latitude'],
-        train_df['dropoff_longitude']
-    )
-
-    # Apply it to your dataframe
-    test_df['trip_distance_km'] = haversine_np(
-        test_df['pickup_latitude'],
-        test_df['pickup_longitude'],
-        test_df['dropoff_latitude'],
-        test_df['dropoff_longitude']
-    )
-
-    train_df.drop(columns={"pickup_datetime","dropoff_datetime","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude"}, inplace=True)
-    test_df.drop(columns={"pickup_datetime","dropoff_datetime","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude"}, inplace=True)
-
-    train_df["store_and_fwd_flag"] = train_df["store_and_fwd_flag"].map({"N": 1, "Y": 2})
-    test_df["store_and_fwd_flag"] = test_df["store_and_fwd_flag"].map({"N": 1, "Y": 2})
-
     X_train = train_df.drop(columns=[TARGET])
     y_train = train_df[TARGET]
     X_test = test_df.drop(columns=[TARGET])
     y_test = test_df[TARGET]
+
+    X_train = edit_id_column(X_train)
+    X_test = edit_id_column(X_test)
+
+    # Apply it to your dataframe
+    X_train['trip_distance_km'] = haversine_np(
+        X_train['pickup_latitude'],
+        X_train['pickup_longitude'],
+        X_train['dropoff_latitude'],
+        X_train['dropoff_longitude']
+    )
+
+    # Apply it to your dataframe
+    X_test['trip_distance_km'] = haversine_np(
+        X_test['pickup_latitude'],
+        X_test['pickup_longitude'],
+        X_test['dropoff_latitude'],
+        X_test['dropoff_longitude']
+    )
+
+
+    X_train["store_and_fwd_flag"] = X_train["store_and_fwd_flag"].map({"N": 1, "Y": 2})
+    X_test["store_and_fwd_flag"] = X_test["store_and_fwd_flag"].map({"N": 1, "Y": 2})
+
+    X_train = modify_datetime(X_train)
+    X_test = modify_datetime(X_test)
+
+    X_train.drop(columns={"pickup_datetime","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude","pickup_datetime", "dropoff_datetime"}, inplace=True)
+    X_test.drop(columns={"pickup_datetime","pickup_longitude","pickup_latitude","dropoff_longitude","dropoff_latitude","pickup_datetime", "dropoff_datetime"}, inplace=True)
+    
+    train_df = X_train.copy()
+    train_df[TARGET] = y_train
+    test_df = X_test.copy()
+    test_df[TARGET] = y_test
+
+
+    train_df.to_csv(f"{output_path}/train.csv", index=False)
+    test_df.to_csv(f"{output_path}/test.csv", index=False)
 
 if __name__ == "__main__":
     main()

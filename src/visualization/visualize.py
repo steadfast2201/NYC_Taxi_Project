@@ -25,7 +25,7 @@ def evaluate(model, X, y, split, live, save_path):
     """
     preds = model.predict(X)
 
-    rmse = metrics.mean_squared_error(y, preds, squared=False)
+    rmse = metrics.root_mean_squared_error(y, preds)
     r2 = metrics.r2_score(y, preds)
 
     # Log metrics
@@ -97,7 +97,7 @@ def main():
     output_path = home_dir / "dvclive"
     output_path.mkdir(parents=True, exist_ok=True)
 
-    TARGET = "target"  # change if your target column is different
+    TARGET = "trip_duration"  # change if your target column is different
     train_df = pd.read_csv(f"{data_path}/train.csv")
     test_df = pd.read_csv(f"{data_path}/test.csv")
 

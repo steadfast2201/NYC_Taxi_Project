@@ -1,0 +1,106 @@
+schema: '2.0'
+stages:
+  make_dataset:
+    cmd: python ./src/data/make_dataset.py ./data/raw/nyc_taxi.csv
+    deps:
+    - path: ./data/raw/nyc_taxi.csv
+      hash: md5
+      md5: e59c291a4b1c640f1dab33b89daa22e1
+      size: 200589097
+    - path: ./src/data/make_dataset.py
+      hash: md5
+      md5: 8f858b04142dc9c708e1f964be0cd7b0
+      size: 1289
+    params:
+      params.yaml:
+        make_dataset.seed: 2023
+        make_dataset.test_split: 0.2
+    outs:
+    - path: ./data/processed/test.csv
+      hash: md5
+      md5: 83081bf3023566549ddfd13b576a421e
+      size: 39402219
+    - path: ./data/processed/train.csv
+      hash: md5
+      md5: b3d5427011f310988a0eefed7bdd3acd
+      size: 157602585
+  build_features:
+    cmd: python ./src/features/build_features.py ./data/processed ./data/features
+    deps:
+    - path: ./data/processed/test.csv
+      hash: md5
+      md5: 83081bf3023566549ddfd13b576a421e
+      size: 39402219
+    - path: ./data/processed/train.csv
+      hash: md5
+      md5: b3d5427011f310988a0eefed7bdd3acd
+      size: 157602585
+    - path: ./src/features/build_features.py
+      hash: md5
+      md5: 7d647a9acf364c917b95fb8ad119fbc4
+      size: 3364
+    params:
+      params.yaml:
+        build_features:
+          use_haversine: true
+          encode_store_and_fwd_flag: true
+          columns_to_drop:
+          - pickup_datetime
+          - dropoff_datetime
+          - pickup_longitude
+          - pickup_latitude
+          - dropoff_longitude
+          - dropoff_latitude
+    outs:
+    - path: ./data/features/test.csv
+      hash: md5
+      md5: a48f9384015d2e36aad896501f81a70c
+      size: 15047631
+    - path: ./data/features/train.csv
+      hash: md5
+      md5: 4951658f2084c0f4d76dbe5489f9dc0d
+      size: 60199164
+  train_model:
+    cmd: python ./src/models/train_model.py ./data/features
+    deps:
+    - path: ./data/features/train.csv
+      hash: md5
+      md5: 4951658f2084c0f4d76dbe5489f9dc0d
+      size: 60199164
+    - path: ./src/models/train_model.py
+      hash: md5
+      md5: 9d6344f9663de719219d5da830f9bed0
+      size: 1477
+    params:
+      params.yaml:
+        train_model.learning_rate: 0.1
+        train_model.max_depth: 8
+        train_model.n_estimators: 100
+        train_model.seed: 21
+    outs:
+    - path: ./models
+      hash: md5
+      md5: a70cc773d66b09ba7cab7c8823a20b05.dir
+      size: 1403588
+      nfiles: 1
+  visualize:
+    cmd: python ./src/visualization/visualize.py ./models/model.joblib ./data/features
+    deps:
+    - path: ./data/features/test.csv
+      hash: md5
+      md5: a48f9384015d2e36aad896501f81a70c
+      size: 15047631
+    - path: ./models/model.joblib
+      hash: md5
+      md5: 59351ebe78502841ef1d31877de90a1e
+      size: 1403588
+    - path: ./src/visualization/visualize.py
+      hash: md5
+      md5: d95d6e0df99b8707009e1dd6648807ac
+      size: 4128
+    outs:
+    - path: dvclive
+      hash: md5
+      md5: b54b9a462d7f8055d1a8c420f2366e2c.dir
+      size: 103920
+      nfiles: 7

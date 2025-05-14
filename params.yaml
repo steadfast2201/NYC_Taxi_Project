@@ -1,6 +1,17 @@
 make_dataset:
   test_split: 0.2
   seed: 2023
+build_features:
+  use_haversine: true               # Enable or disable Haversine calculation
+  encode_store_and_fwd_flag: true   # Enable or disable encoding of 'store_and_fwd_flag'
+  columns_to_drop:
+    - pickup_datetime
+    - dropoff_datetime
+    - pickup_longitude
+    - pickup_latitude
+    - dropoff_longitude
+    - dropoff_latitude
+
 train_model:
   seed: 21
   n_estimators: 100

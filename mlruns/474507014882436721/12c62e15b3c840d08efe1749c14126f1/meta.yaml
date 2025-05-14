@@ -1,0 +1,15 @@
+artifact_uri: file:///A:/Aniket_Scidentai/MLOPS/nyc_taxi_duration/mlruns/474507014882436721/12c62e15b3c840d08efe1749c14126f1/artifacts
+end_time: 1747210961498
+entry_point_name: ''
+experiment_id: '474507014882436721'
+lifecycle_stage: active
+run_id: 12c62e15b3c840d08efe1749c14126f1
+run_name: evaluate_regression_model
+run_uuid: 12c62e15b3c840d08efe1749c14126f1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747210960735
+status: 4
+tags: []
+user_id: sdais

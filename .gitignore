@@ -24,8 +24,6 @@ var/
 *.egg
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
@@ -63,28 +61,30 @@ target/
 *.db
 *.rdb
 
-# Pycharm
-.idea
-
-# VS Code
+# IDE-specific files
+.idea/
 .vscode/
-
-# Spyder
 .spyproject/
 
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
-# exclude data from source control by default
-/data/
-
-# Mac OS-specific storage files
+# Mac OS-specific files
 .DS_Store
 
-# vim
+# Vim
 *.swp
 *.swo
 
 # Mypy cache
 .mypy_cache/
-/data
+
+# DVC input data (do not track raw inputs)
+data/raw/
+data/features/
+
+# DVC cache (optional if you don't want to commit DVC cache)
+.dvc/cache/
+/dvclive
+
+
