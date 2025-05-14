@@ -1,0 +1,13 @@
+
+PyYAML
+pandas
+scikit-learn
+numpy
+joblib
+boto3
+botocore
+dvclive
+matplotlib
+mlflow
+xgboost
+pathlib
