@@ -29,8 +29,8 @@ def evaluate(model, X, y, split, live, save_path):
     r2 = metrics.r2_score(y, preds)
 
     # Log metrics
-    live.log_metric(f"rmse_{split}", rmse)
-    live.log_metric(f"r2_{split}", r2)
+    live.summary[f"rmse_{split}"] = rmse
+    live.summary[f"r2_{split}"] = r2
     mlflow.log_metric(f"rmse_{split}", rmse)
     mlflow.log_metric(f"r2_{split}", r2)
 
