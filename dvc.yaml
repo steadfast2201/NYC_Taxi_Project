@@ -44,6 +44,3 @@ stages:
       - ./src/visualization/visualize.py
     outs:
       - dvclive
-
-  metrics:
-  - dvclive\metrics.json
