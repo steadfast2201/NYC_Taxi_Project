@@ -82,11 +82,12 @@ target/
 # DVC input data (do not track raw inputs)
 data/raw/
 data/features/
+data/processed/
 # DVC cache (optional if you don't want to commit DVC cache)
 .dvc/cache/
 /dvclive
 
-# Models Files 
+# Models Folder
 /nyc
 /models
-TEMP/
+/TEMP
